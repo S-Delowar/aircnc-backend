@@ -20,11 +20,11 @@ app.get('/', (req, res) => {
 
 
 app.post('/addHouse', (req, res) => {
-    const product = req.body;
+    const house = req.body;
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
         const collection = client.db("AirCNC").collection("houses");
-        collection.insert(product, (err, result)=>{
+        collection.insert(house, (err, result)=>{
             if(err){
                 console.log(err)
                 res.status(500).send({message:err});
@@ -73,6 +73,26 @@ app.get('/houses/:id', (req, res) =>{
         client.close();
       });
 });
+
+app.post('/checkout', (req, res) => {
+    const checkoutInfo = req.body;
+    client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("AirCNC").collection("checkouts");
+        collection.insert(checkoutInfo, (err, result)=>{
+            if(err){
+                console.log(err)
+                res.status(500).send({message:err});
+            }
+            else{
+                res.send(result.ops[0]);
+            }
+        });
+        //client.close();
+      });
+});
+
+
 
 
 app.listen(port, () => {
