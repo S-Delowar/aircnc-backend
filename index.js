@@ -54,6 +54,26 @@ app.get('/houses', (req, res) =>{
       });
 });
 
+app.get('/houses/:id', (req, res) =>{
+    const houseId = Number(req.params.id);    
+    
+    client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("AirCNC").collection("houses");
+        collection.find({id: houseId}).toArray((err, documents)=>{
+            if(err){
+                console.log(err)
+                res.status(500).send({message:err});
+            }
+            else{
+                res.send(documents[0]);
+                console.log(documents[0])
+            }
+        });
+        client.close();
+      });
+});
+
 
 app.listen(port, () => {
     console.log(`We are live on port ${port}`);
