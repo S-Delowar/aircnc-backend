@@ -95,6 +95,85 @@ app.post('/checkout', (req, res) => {
 
 
 
+//post experiences to database
+app.post('/addExperience', (req, res) => {
+    const house = req.body;
+    client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("AirCNC").collection("experiences");
+        collection.insert(house, (err, result)=>{
+            if(err){
+                console.log(err)
+                res.status(500).send({message:err});
+            }
+            else{
+                res.send(result.ops[0]);
+            }
+        });
+        //client.close();
+      });
+});
+
+
+
+//get experiences from database
+app.get('/experiences', (req, res) =>{
+    client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("AirCNC").collection("experiences");
+        collection.find().toArray((err, documents)=>{
+            if(err){
+                console.log(err)
+                res.status(500).send({message:err});
+            }
+            else{
+                res.send(documents);
+            }
+        });
+        client.close();
+      });
+});
+
+
+//post homes to database for homePage
+app.post('/addHome', (req, res) => {
+    const house = req.body;
+    client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("AirCNC").collection("homes");
+        collection.insert(house, (err, result)=>{
+            if(err){
+                console.log(err)
+                res.status(500).send({message:err});
+            }
+            else{
+                res.send(result.ops[0]);
+            }
+        });
+        //client.close();
+      });
+});
+
+
+//get homes for homePage from database
+app.get('/homes', (req, res) =>{
+    client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("AirCNC").collection("homes");
+        collection.find().toArray((err, documents)=>{
+            if(err){
+                console.log(err)
+                res.status(500).send({message:err});
+            }
+            else{
+                res.send(documents);
+            }
+        });
+        client.close();
+      });
+});
+
+
 app.listen(port, () => {
     console.log(`We are live on port ${port}`);
 })
