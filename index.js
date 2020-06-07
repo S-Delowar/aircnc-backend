@@ -12,13 +12,14 @@ app.use(cors());
 
 const port = process.env.PORT;
 const uri = process.env.DB_PATH;
-//console.log(uri)
 
+//environment testing
 app.get('/', (req, res) => {
     res.send('Welcome to my api');
 })
 
 
+//post houses to database
 app.post('/addHouse', (req, res) => {
     const house = req.body;
     client = new MongoClient(uri, { useNewUrlParser: true });
@@ -33,10 +34,12 @@ app.post('/addHouse', (req, res) => {
                 res.send(result.ops[0]);
             }
         });
-        //client.close();
+        client.close();
       });
 });
 
+
+//get all houses from database
 app.get('/houses', (req, res) =>{
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
@@ -54,6 +57,8 @@ app.get('/houses', (req, res) =>{
       });
 });
 
+
+//dynamic api to get each house
 app.get('/houses/:id', (req, res) =>{
     const houseId = Number(req.params.id);    
     
@@ -74,6 +79,8 @@ app.get('/houses/:id', (req, res) =>{
       });
 });
 
+
+//post checkout information to database
 app.post('/checkout', (req, res) => {
     const checkoutInfo = req.body;
     client = new MongoClient(uri, { useNewUrlParser: true });
@@ -88,7 +95,7 @@ app.post('/checkout', (req, res) => {
                 res.send(result.ops[0]);
             }
         });
-        //client.close();
+        client.close();
       });
 });
 
@@ -150,7 +157,7 @@ app.post('/addHome', (req, res) => {
                 res.send(result.ops[0]);
             }
         });
-        //client.close();
+        client.close();
       });
 });
 
